@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Number Guessing Game by Umar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+        input, button {
+            margin: 10px 0;
+        }
+        #gameContainer {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h2>Number Guessing Game by Umar</h2>
+        <p>Set the range:</p>
+        <input type="number" id="minRange" placeholder="Minimum number (e.g. 1)">
+        <input type="number" id="maxRange" placeholder="Maximum number (e.g. 100)">
+        <button onclick="setRange()">Set Range</button>
+
+        <p>Guess a number within the range you set</p>
+        <input type="number" id="guessInput" placeholder="Enter your guess" disabled>
+        <button onclick="checkGuess()" disabled>Guess</button>
+        <p id="guessesLeft"></p>
+        <p id="feedback"></p>
+    </div>
+    <footer>
+        Created by Umar
+    </footer>
+    <script>
+        let secretNumber, guessLimit, guessesLeft;
+        const feedbackElement = document.getElementById('feedback');
+        const guessesLeftElement = document.getElementById('guessesLeft');
+        const guessBtn = document.querySelector('button[onclick="checkGuess()"]');
+        const guessInput = document.getElementById('guessInput');
+
+        function setRange() {
+            const min = parseInt(document.getElementById('minRange').value) || 1;
+            const max = parseInt(document.getElementById('maxRange').value) || 100;
+            secretNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            guessLimit = 10; // Set the limit of guesses here
+            guessesLeft = guessLimit;
+            guessInput.disabled = false;
+            guessBtn.disabled = false;
+            guessesLeftElement.textContent = `Guesses left: ${guessesLeft}`;
+            feedbackElement.textContent = '';
+        }
+
+        function checkGuess() {
+            if (guessesLeft > 0) {
+                const userGuess = parseInt(guessInput.value);
+                guessesLeft--;
+                if (userGuess > secretNumber) {
+                    feedbackElement.textContent = 'Too high! Try again.';
+                } else if (userGuess < secretNumber) {
+                    feedbackElement.textContent = 'Too low! Try again.';
+                } else {
+                    feedbackElement.textContent = 'Correct! Well done.';
+                    guessInput.disabled = true;
+                    guessBtn.disabled = true;
+                }
+                guessesLeftElement.textContent = `Guesses left: ${guessesLeft}`;
+            }
+            if (guessesLeft <= 0) {
+                feedbackElement.textContent += ' Game Over!';
+                guessInput.disabled = true;
+                guessBtn.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
